@@ -12,6 +12,8 @@ assesses category and type performance, and aggregates filtered data.
 
 - Python 3.x
 - Pandas library
+- Django
+- Django RestFramework
 
 ## Setup
 
