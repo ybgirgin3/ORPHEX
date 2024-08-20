@@ -6,6 +6,7 @@ from django.db import models
 
 
 class Data(models.Model):
+    "data model: db columns for datasource"
     customer_id = models.CharField(max_length=100)
     revenue = models.FloatField()
     conversions = models.IntegerField()

@@ -6,13 +6,19 @@ from .serializers import DataSerializer
 import pandas as pd
 
 class DataViewSet(viewsets.ViewSet):
+    "Data viewset for url responses"
     queryset = Data.objects.all()
 
     @action(detail=False, methods=['get'], url_path='conversion-rate')
     def conversion_rate(self, request):
+        # get all data from db
         data = self.queryset
+        # serialize data
         serializer = DataSerializer(data, many=True)
+        # convert serialized data to pandas dataframe
         df = pd.DataFrame(serializer.data)
+
+        # do conversations
         df['conversion_rate'] = df['conversions'] / df['revenue']
         highest_conversion_rate = df.loc[df['conversion_rate'].idxmax()]
         lowest_conversion_rate = df.loc[df['conversion_rate'].idxmin()]
