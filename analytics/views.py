@@ -33,23 +33,18 @@ class DataViewSet(viewsets.ViewSet):
         response = status_distribution.to_dict(orient='records')
         return Response(response)
 
-
-class CategoryTypePerformanceView(APIView):
-    def get(self, request):
-        data = pd.DataFrame(list(Data.objects.all().values()))
-        category_type_performance = (
-            data.groupby(["category", "type"])
-            .agg({"revenue": "sum", "conversions": "sum"})
-            .reset_index()
-        )
-        top_performance = category_type_performance.sort_values(
-            by="conversions", ascending=False
-        ).head(1)
+    @action(detail=False, methods=['get'], url_path='category-type-performance')
+    def category_type_performance(self, request):
+        data = self.queryset
+        serializer = DataSerializer(data, many=True)
+        df = pd.DataFrame(serializer.data)
+        category_type_performance = df.groupby(['category', 'type']).agg({'revenue': 'sum', 'conversions': 'sum'}).reset_index()
+        top_performance = category_type_performance.sort_values(by='conversions', ascending=False).head(1)
         response = {
-            "performance": category_type_performance.to_dict(orient="records"),
-            "top_performance": top_performance.to_dict(orient="records"),
+            'performance': category_type_performance.to_dict(orient='records'),
+            'top_performance': top_performance.to_dict(orient='records')
         }
-        return Response(response, status=status.HTTP_200_OK)
+        return Response(response)
 
 
 class FilteredAggregationView(APIView):
