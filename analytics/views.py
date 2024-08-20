@@ -1,9 +1,8 @@
-from django.shortcuts import render
-from rest_framework import status
-from rest_framework.views import APIView
+from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from analytics.models import Data
-from analytics.serializers import DataSerializer
+from .models import Data
+from .serializers import DataSerializer
 import pandas as pd
 
 class DataViewSet(viewsets.ViewSet):
