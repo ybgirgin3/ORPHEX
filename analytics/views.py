@@ -9,20 +9,20 @@ import pandas as pd
 class DataViewSet(viewsets.ViewSet):
     queryset = Data.objects.all()
 
-
-class ConversationRateView(APIView):
-    def get(self, request):
-        data = pd.DataFrame(list(Data.objects.all().values()))
-        data["conversion_rate"] = data["conversions"] / data["revenue"]
-        highest_conversation_rate = data.loc[data["conversion_rate"].idxmax()]
-        lowest_conversation_rate = data.loc[data["conversation_rate"].idxmin()]
+    @action(detail=False, methods=['get'], url_path='conversion-rate')
+    def conversion_rate(self, request):
+        data = self.queryset
+        serializer = DataSerializer(data, many=True)
+        df = pd.DataFrame(serializer.data)
+        df['conversion_rate'] = df['conversions'] / df['revenue']
+        highest_conversion_rate = df.loc[df['conversion_rate'].idxmax()]
+        lowest_conversion_rate = df.loc[df['conversion_rate'].idxmin()]
         response = {
-            "conversation_rate": data.to_dict(orient="records"),
-            "highest_conversation_rate": highest_conversation_rate.to_dict(),
-            "lowest_conversation_rate": lowest_conversation_rate.to_dict(),
+            'conversion_rates': df.to_dict(orient='records'),
+            'highest_conversion_rate': highest_conversion_rate.to_dict(),
+            'lowest_conversion_rate': lowest_conversion_rate.to_dict()
         }
-        return Response(response, status=status.HTTP_200_OK)
-
+        return Response(response)
 
 class StatusDistributionView(APIView):
     def get(self, request):
