@@ -45,3 +45,21 @@ assesses category and type performance, and aggregates filtered data.
    ```bash
    python manage.py runserver
    ```
+
+## Screenhosts
+
+- Conversation Rate
+
+<img src='docs/conversation-rate.png'/>
+
+- Status Distribution
+
+<img src='docs/status-distribution.png'/>
+
+- Category Type Performance
+
+<img src='docs/category-type-performance.png'/>
+
+- Filtered Aggregation
+
+<img src='docs/filtered-aggregation.png'/>
