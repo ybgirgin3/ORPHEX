@@ -46,14 +46,11 @@ class DataViewSet(viewsets.ViewSet):
         }
         return Response(response)
 
-
-class FilteredAggregationView(APIView):
-    def get(self, request):
-        data = pd.DataFrame(list(Data.objects.filter(type="CONVERSION").values()))
-        aggregated_data = (
-            data.groupby("customer_id")
-            .agg({"revenue": "mean", "conversions": "mean"})
-            .reset_index()
-        )
-        response = aggregated_data.to_dict(orient="records")
-        return Response(response, status=status.HTTP_200_OK)
+    @action(detail=False, methods=['get'], url_path='filtered-aggregation')
+    def filtered_aggregation(self, request):
+        data = self.queryset.filter(type='CONVERSION')
+        serializer = DataSerializer(data, many=True)
+        df = pd.DataFrame(serializer.data)
+        aggregated_data = df.groupby('customer_id').agg({'revenue': 'mean', 'conversions': 'mean'}).reset_index()
+        response = aggregated_data.to_dict(orient='records')
+        return Response(response)
