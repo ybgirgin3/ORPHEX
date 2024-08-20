@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # extra
     "rest_framework",
+    # own
     "analytics",
 ]
 
@@ -52,6 +54,14 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "root.urls"
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',  # Tarayıcıda API görünümü için
+    ],
+}
+
 
 TEMPLATES = [
     {
