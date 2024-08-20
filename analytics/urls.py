@@ -1,4 +1,11 @@
-from django.contrib import admin
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import DataViewSet
 
-urlpatterns = [path("admin/", admin.site.urls), path("api/", include("analytics.urls"))]
+router = DefaultRouter()
+router.register(r'data', DataViewSet, basename='data')
+
+urlpatterns = [
+    path('', include(router.urls)),
+]
+
