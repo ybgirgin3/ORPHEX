@@ -6,7 +6,8 @@ from analytics.models import Data
 from analytics.serializers import DataSerializer
 import pandas as pd
 
-# Create your views here.
+class DataViewSet(viewsets.ViewSet):
+    queryset = Data.objects.all()
 
 
 class ConversationRateView(APIView):
